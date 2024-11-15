@@ -6,7 +6,8 @@ const auth = async (req, res, next) => {
     }
     const cookie = req.cookies.token;
     let decodedData;
-    decodedData = jwt.verify(cookie, process.env.JWT_SECRET);
+    decodedData = jwt.verify(cookie, undefined);
+    // decodedData = jwt.verify(cookie, process.env.JWT_SECRET);
     if (decodedData) {
       req.userId = decodedData?._id;
       next();
@@ -26,7 +27,8 @@ const checkAdmin = async (req, res, next) => {
     }
     const cookie = req.cookies.token;
     let decodedData;
-    decodedData = jwt.verify(cookie, process.env.JWT_SECRET);
+    decodedData = jwt.verify(cookie, undefined);
+    // decodedData = jwt.verify(cookie, process.env.JWT_SECRET);
     if (decodedData?.role === true) {
       req.userId = decodedData?._id;
       next();
