@@ -1,6 +1,6 @@
 import express from 'express';
-import { signin, signup, signOut, getVerified, addWishlist, removeWishlist, getWishlist, getCart, addCart, removeCart, cartQuantity, checkout } from '../controller/user.js';
-import { auth } from '../middleware/auth.js';
+import { signin, signup, signOut, getVerified, addWishlist, removeWishlist, getWishlist, getCart, addCart, removeCart, cartQuantity, checkout , getListUserDetail} from '../controller/user.js';
+import { auth, checkAdmin } from '../middleware/auth.js';
 const router = express.Router();
 router.post('/signin', signin)
 router.post('/signup', signup)
@@ -14,4 +14,6 @@ router.post('/cart/:id', auth, addCart)
 router.delete('/cart/:id', auth, removeCart)
 router.post('/cart/:id/quantity', auth, cartQuantity)
 router.post('/checkout', auth, checkout)
+router.get('/listUserDetail', checkAdmin, getListUserDetail)
+
 export default router;
