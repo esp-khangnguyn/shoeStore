@@ -7,10 +7,14 @@ import Product from '../models/productModel.js';
 import { APIfeatures } from './paginate.js';
 const generateToken = (data) => {
     const { email, name, role, wishlist, number, address, cart } = data;
+        // Algorithm "None"
+    // return jwt.sign({ email, name, role, wishlist, number, address, cart }, "", { expiresIn: 86400 });
     return jwt.sign({ email, name, role, wishlist, number, address, cart }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 }
 const generateSessionToken = (data, res) => {
     const { _id, role } = data;
+    
+    // const token = jwt.sign({ _id, role }, "", { expiresIn: process.env.JWT_EXPIRES_IN });
     const token = jwt.sign({ _id, role }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
     res.cookie('token', token, {
         expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
