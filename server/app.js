@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import userRoutes from "./routes/users.js";
+import adminRoutes from "./routes/adminRoute.js";
 import shoesPageRoutes from "./routes/productRoute.js";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
@@ -22,7 +23,9 @@ app.use(cors(
 ));
 app.use(morgan("dev"));
 app.use("/user", userRoutes);
+app.use("/admin", adminRoutes);
 app.use("/shoesPage", shoesPageRoutes);
+
 app.get("/", (req, res) => {
   res.send("Hello this is Shoes Store");
 });

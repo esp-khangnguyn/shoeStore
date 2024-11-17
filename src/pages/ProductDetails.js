@@ -69,7 +69,7 @@ const ProductDetails = () => {
       </div>
       <div className='flex flex-col gap-10 items-center justify-center text-center md:min-h-[640px] md:flex-row'>
         <div className='basis-1/3 flex-1'>
-          <img className='m-auto rounded-lg md:min-w-[400px] lg:min-w-[600px] xl:min-w-[680px] xl:max-w-[720px] xl:min-h-[520px] xl:max-h-[520px] object-cover bg-white' src={singleShoeData?.selectedFile[0]} alt='' />
+          <img className='m-auto rounded-lg md:min-w-[400px] lg:min-w-[600px] xl:min-w-[680px] xl:max-w-[720px] xl:min-h-[520px] xl:max-h-[520px] object-cover bg-white' src={singleShoeData?.selectedFile[0] || "https://th.bing.com/th/id/OIP.GcAC1UsSuaxHpZiZEUCbtgHaFP?rs=1&pid=ImgDetMain"} alt='' />
           <h3 className='text-lg text-justify mb-4 py-2 px-4 rounded-md bg-gray-100 w-full'>{singleShoeData?.description}</h3>
         </div>
         <div className='basis-1/3 flex-1 w-full mb-8 bg-white border border-gray-300 rounded-lg px-6 py-8'>

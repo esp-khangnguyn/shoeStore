@@ -1,12 +1,11 @@
 import express from 'express';
-import { signin, signup, signOut, getVerified, addWishlist, removeWishlist, getWishlist, getCart, addCart, removeCart, cartQuantity, checkout, getListUserDetail } from '../controller/user.js';
+import { signin, signup, signOut, getVerified, addWishlist, removeWishlist, getWishlist, getCart, addCart, removeCart, cartQuantity, checkout} from '../controller/user.js';
 import { auth, checkAdmin } from '../middleware/auth.js';
 const router = express.Router();
 router.post('/signin', signin)
 router.post('/signup', signup)
 router.get('/signout', auth, signOut)
 router.get('/:userId/verify/:verifyId', getVerified)
-router.get('/getListUserDetail', checkAdmin, getListUserDetail)
 router.post('/wishlist/:id', auth, addWishlist)
 router.delete('/wishlist/:id', auth, removeWishlist)
 router.get('/wishlist', auth, getWishlist)

@@ -49,7 +49,7 @@ const Carousel = () => {
                             <SwiperSlide key={index} className="pb-10">
                                 <div className={`shadow-xl px-3 pt-3 pb-2 rounded-lg rounded-tl-[90px] w-full max-w-[352px] mx-auto cursor-pointer hover:shadow-xl transition relative`}>
                                     <center><img className={`mb-3 rounded-tl-[90px]
-      min-w-[240px] max-w-[240px] min-h-[240px] max-h-[240px] object-cover`} src={item?.selectedFile[0]} alt={item?.title} /></center>
+      min-w-[240px] max-w-[240px] min-h-[240px] max-h-[240px] object-cover`} src={item?.selectedFile[0] || "https://th.bing.com/th/id/OIP.GcAC1UsSuaxHpZiZEUCbtgHaFP?rs=1&pid=ImgDetMain"} alt={item?.title} /></center>
                                     <div className='w-full h-full flex justify-center items-center rounded-lg rounded-tl-[90px]
       opacity-0 hover:opacity-100 transition duration-500 absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 ease-in-out hover:bg-[#00000003]'>
                                         <Link to={`/product/${item?._id}`}>

@@ -1,6 +1,7 @@
 import productModel from "../models/productModel.js";
 import { APIfeatures } from "./paginate.js";
 
+
 export const getproductPage = async (req, res) => {
   try {
     req.query.page = parseInt(req.query.page);
@@ -180,4 +181,32 @@ export const getfilterProduct = async (req, res) => {
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
+};
+
+export const deleteProductById = async (req, res) => {    
+  try {
+        const { productId } = req.body; 
+        if (!productId) {
+            return res.status(400).json({ success: false, message: 'Product ID is required' });
+        }
+
+        const deletedProduct = await productModel.findByIdAndDelete(productId);
+
+        if (!deletedProduct) {
+            return res.status(404).json({ success: false, message: 'Product not found' });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Product deleted successfully',
+            product: deletedProduct,
+        });
+    } catch (error) {
+        console.error('Error deleting product:', error.message);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
+    }
 };
