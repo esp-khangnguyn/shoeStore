@@ -1,17 +1,28 @@
 import productModel from "../models/productModel.js";
 import { APIfeatures } from "./paginate.js";
 
-
 export const getproductPage = async (req, res) => {
   try {
     req.query.page = parseInt(req.query.page);
     req.query.limit = parseInt(req.query.limit);
-    const features = new APIfeatures(productModel.find(), req.query).sorting().paginating().filtering()
+    const features = new APIfeatures(productModel.find(), req.query).sorting().paginating().filtering();
     const data = await features.query;
     const paginateRemaining = features.paginate;
-    const runnning = await productModel.find(features.queryString).find({ shoeFor: "Running" }).skip(paginateRemaining.skip).limit(paginateRemaining.limit);
-    const lounging = await productModel.find(features.queryString).find({ shoeFor: "Lounging" }).skip(paginateRemaining.skip).limit(paginateRemaining.limit);
-    const everyday = await productModel.find(features.queryString).find({ shoeFor: "Everyday" }).skip(paginateRemaining.skip).limit(paginateRemaining.limit);
+    const runnning = await productModel
+      .find(features.queryString)
+      .find({ shoeFor: "Running" })
+      .skip(paginateRemaining.skip)
+      .limit(paginateRemaining.limit);
+    const lounging = await productModel
+      .find(features.queryString)
+      .find({ shoeFor: "Lounging" })
+      .skip(paginateRemaining.skip)
+      .limit(paginateRemaining.limit);
+    const everyday = await productModel
+      .find(features.queryString)
+      .find({ shoeFor: "Everyday" })
+      .skip(paginateRemaining.skip)
+      .limit(paginateRemaining.limit);
     res.status(200).json({ data, runnning, lounging, everyday });
   } catch (error) {
     console.log(error);
@@ -29,18 +40,18 @@ export const getTopProducts = async (req, res) => {
 };
 
 export const createproductPage = async (req, res) => {
-  const { title, description, selectedFile, price, category, quantity, shoeFor, brand } = req.body;
+  const { title, description, price, category, quantity, shoeFor, brand } = req.body;
   try {
     if (!title || !description) {
       return res.status(400).json({
         message: "Please provide all required fields",
       });
     }
-    if (!selectedFile) {
-      return res.status(400).json({
-        message: "Please provide a file",
-      });
-    }
+    // if (!selectedFile) {
+    //   return res.status(400).json({
+    //     message: "Please provide a file",
+    //   });
+    // }
     if (!price) {
       return res.status(400).json({
         message: "Please provide a price",
@@ -66,6 +77,11 @@ export const createproductPage = async (req, res) => {
         message: "Please provide a brand",
       });
     }
+
+    const selectedFile = req.files.map((file) => {
+      return `http://localhost:5000/${file.path}`;
+    });
+
     const productPageData = new productModel({
       title,
       description,
@@ -77,9 +93,7 @@ export const createproductPage = async (req, res) => {
       brand,
     });
     const savedproductPage = await productPageData.save();
-    res
-      .status(200)
-      .json({ data: savedproductPage, message: `${savedproductPage.title} created successfully` });
+    res.status(200).json({ data: savedproductPage, message: `${savedproductPage.title} created successfully` });
   } catch (error) {
     res.json({
       message: error.message,
@@ -183,30 +197,30 @@ export const getfilterProduct = async (req, res) => {
   }
 };
 
-export const deleteProductById = async (req, res) => {    
+export const deleteProductById = async (req, res) => {
   try {
-        const { productId } = req.body; 
-        if (!productId) {
-            return res.status(400).json({ success: false, message: 'Product ID is required' });
-        }
-
-        const deletedProduct = await productModel.findByIdAndDelete(productId);
-
-        if (!deletedProduct) {
-            return res.status(404).json({ success: false, message: 'Product not found' });
-        }
-
-        res.status(200).json({
-            success: true,
-            message: 'Product deleted successfully',
-            product: deletedProduct,
-        });
-    } catch (error) {
-        console.error('Error deleting product:', error.message);
-        res.status(500).json({
-            success: false,
-            message: 'Internal server error',
-            error: error.message,
-        });
+    const { productId } = req.body;
+    if (!productId) {
+      return res.status(400).json({ success: false, message: "Product ID is required" });
     }
+
+    const deletedProduct = await productModel.findByIdAndDelete(productId);
+
+    if (!deletedProduct) {
+      return res.status(404).json({ success: false, message: "Product not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Product deleted successfully",
+      product: deletedProduct,
+    });
+  } catch (error) {
+    console.error("Error deleting product:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
 };
