@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken";
+import fs from "fs";
+
 const auth = async (req, res, next) => {
   try {
     if (!req.cookies.token) {
@@ -6,7 +8,9 @@ const auth = async (req, res, next) => {
     }
     const cookie = req.cookies.token;
     let decodedData;
-    decodedData = jwt.verify(cookie, process.env.JWT_SECRET);
+    const publicKey = fs.readFileSync('./certs/public.pem', 'utf-8');
+    decodedData = jwt.verify(cookie, publicKey, { algorithms: ['RS256'] });
+    console.log("🚀 ~ auth ~ decodedData:", decodedData)
     if (decodedData) {
       req.userId = decodedData?._id;
       next();
@@ -26,7 +30,8 @@ const checkAdmin = async (req, res, next) => {
     }
     const cookie = req.cookies.token;
     let decodedData;
-    decodedData = jwt.verify(cookie, process.env.JWT_SECRET);
+    const publicKey = fs.readFileSync('./certs/public.pem', 'utf-8');
+    decodedData = jwt.verify(cookie, publicKey, { algorithms: ['RS256'] });
     if (decodedData?.role === true) {
       req.userId = decodedData?._id;
       next();

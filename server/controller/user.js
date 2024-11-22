@@ -5,15 +5,27 @@ import verifyUser from "../models/valideUser.js";
 import { CheckoutEmail, sendEmail } from "../Utils/nodemailer.js";
 import Product from '../models/productModel.js';
 import { APIfeatures } from './paginate.js';
+import fs from 'fs';
+
+
 const generateToken = (data) => {
     const { email, name, role, wishlist, number, address, cart } = data;
-    return jwt.sign({ email, name, role, wishlist, number, address, cart }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+    const privateKey = {
+        key: fs.readFileSync('./certs/private.pem', 'utf-8'),
+        passphrase: 'Kitale25' 
+    };
+    const token = jwt.sign({ email, name, role, wishlist, number, address, cart }, privateKey, { algorithm: 'RS256', expiresIn: 86400 });
+    return token;
 }
 const generateSessionToken = (data, res) => {
     const { _id, role } = data;
-    const token = jwt.sign({ _id, role }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+    const privateKey = {
+        key: fs.readFileSync('./certs/private.pem', 'utf-8'),
+        passphrase: 'Kitale25' 
+    };
+    const token = jwt.sign({ _id, role }, privateKey, { algorithm: 'RS256', expiresIn: 86400 });
     res.cookie('token', token, {
-        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+        expires: new Date(Date.now() + 86400),
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production' ? true : false,
         sameSite: 'strict'
@@ -21,7 +33,10 @@ const generateSessionToken = (data, res) => {
 }
 
 export const signin = async (req, res) => {
+
     const { email, password } = req.body;
+
+
     try {
         if (!email || !password) {
             return res.status(400).json({ message: "Please fill all the fields" });
@@ -30,7 +45,9 @@ export const signin = async (req, res) => {
         if (!existingUser) return res.status(404).json({ message: "User doesn't exist." });
         const isPasswordCorrect = await bcrypt.compare(password, existingUser.password);
         if (!isPasswordCorrect) return res.status(400).json({ message: "Invalid credentials." });
+
         const token = generateToken(existingUser);
+
         if (!existingUser?.verifiedUser) {
             let checkVerify = await verifyUser.findOne({ userId: existingUser._id });
             if (!checkVerify) {
