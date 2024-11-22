@@ -6,6 +6,6 @@ import {checkAdmin} from '../middleware/auth.js';
 const router = express.Router();
 
 router.get('/getListUserDetail', checkAdmin, getListUserDetail)
-router.post('/removeProduct', deleteProductById);
+router.post('/removeProduct', checkAdmin, deleteProductById);
 
 export default router;
