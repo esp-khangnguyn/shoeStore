@@ -87,7 +87,7 @@ export default function Cart() {
                                                 return (
                                                     <div key={index}>
                                                         <div className='px-6 flex'>
-                                                            <div className='bg-gray-50 relative'><img className={`relative min-w-[100px] max-w-[100px] min-h-[100px] max-h-[100px] object-cover bg-white`} src={Products?.selectedFile[0]} alt={Products?.title} />
+                                                            <div className='bg-gray-50 relative'><img className={`relative min-w-[100px] max-w-[100px] min-h-[100px] max-h-[100px] object-cover bg-white`} src={Products?.selectedFile[0] || "https://th.bing.com/th/id/OIP.GcAC1UsSuaxHpZiZEUCbtgHaFP?rs=1&pid=ImgDetMain"} alt={Products?.title} />
                                                                 <AiFillMinusCircle title='remove'
                                                                     className='absolute inset-x-1 top-2 text-[#FE3E69] cursor-pointer text-2xl'
                                                                     onClick={() => DeleteCart(Products?._id)} />
